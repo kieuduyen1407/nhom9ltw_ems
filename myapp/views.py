@@ -13,5 +13,5 @@ def about(request):
 def profile_detail(request, id):
     emp = get_object_or_404(Profile, id=id)
     return render(request,'profile_detail.html', {'emp': emp})
-def login(request):
+def logout(request):
     return redirect('/')
