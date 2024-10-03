@@ -15,3 +15,5 @@ def profile_detail(request, id):
     return render(request,'profile_detail.html', {'emp': emp})
 def logout(request):
     return redirect('/')
+def login(request):
+    return redirect('/')
