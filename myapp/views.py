@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Profile
 from django.contrib.auth.models import User
 
@@ -13,3 +13,5 @@ def about(request):
 def profile_detail(request, id):
     emp = get_object_or_404(Profile, id=id)
     return render(request,'profile_detail.html', {'emp': emp})
+def login(request):
+    return redirect('/')
