@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+Hello <br>
+{% for emp in emps %}
+{{emp.nickname}}
+{{emp.dob}}
+{{emp.phone_number}}
+{{emp.user.username}}
+{{emp.user.email}}
+{% endfor %}
+<br>
+</body>
+</html>
