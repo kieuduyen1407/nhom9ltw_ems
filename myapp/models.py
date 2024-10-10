@@ -14,13 +14,23 @@ class Position(models.Model):
         return self.name
 
 
+class Department(models.Model):
+    name=models.CharField(max_length=50)
+    description = models.TextField()
+    
+    def __str__(self):
+        return self.name
+
+
 class Profile(models.Model):
     dob=models.DateField()
     phone_number=models.CharField(max_length=12)
     start_date = models.DateField(auto_now_add=True)
     end_date = models.DateField(null=True, blank=True)
     address = models.CharField(max_length=200)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, default=1)
     position=models.ForeignKey(Position,on_delete=models.CASCADE, default=1)
+    gender = models.CharField(max_length=10, choices=[('Nam', 'Nam'), ('Nữ', 'Nữ')])
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -52,8 +62,12 @@ class Sheet(models.Model):
 
     def calculate_salary(self):
         profile = Profile.objects.get(user=self.user)
-        rate = profile.position.salary_coef * 30000
         if self.work_hour is not None:
+            if self.status == 'Muộn':
+                salary_1hour = 25000
+            else:
+                salary_1hour = 30000
+            rate = profile.position.salary_coef * salary_1hour
             self.salary = rate * Decimal(self.work_hour)
         else:
             self.salary = 0

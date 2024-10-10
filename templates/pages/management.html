@@ -1,0 +1,37 @@
+{% extends '../layouts/base.html' %}
+
+{% block main %}
+
+<h1 style="text-align: center;">Bảng điều khiển</h1>
+<div class="row gap-4 d-flex justify-content-center">
+  <div class="card col-3 bg-info" style="cursor: pointer;">
+    <div class="card-body">
+      <h1 class="card-title text-light" style="text-align: center;">Nhân viên</h1>
+      <div class="d-flex gap-5 justify-content-center">
+        <span class="text-light"><strong style="font-size: 70px;">{{ count_emp_male }}</strong>  <i class="fa-solid fa-mars" style="font-size: 50px;"></i></span>
+        <span class="text-light"><strong style="font-size: 70px;">{{ count_emp_female }}</strong>  <i class="fa-solid fa-venus" style="font-size: 50px;"></i></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card col-3 bg-info" style="cursor: pointer;">
+    <div class="card-body">
+      <h1 class="card-title text-light" style="text-align: center;">Vị trí</h1>
+      <div style="text-align: center;">
+        <span class="text-light"><strong style="font-size: 70px;">{{ count_position }}</strong>   <i class="fa-solid fa-sitemap" style="font-size: 50px;"></i></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card col-3 bg-info" style="cursor: pointer;">
+    <div class="card-body">
+      <h1 class="card-title text-light" style="text-align: center;">Phòng ban</h1>
+      <div style="text-align: center;">
+        <span class="text-light"><strong style="font-size: 70px;">{{ count_department }}</strong>   <i class="fa-solid fa-user-tie" style="font-size: 50px;"></i></span>
+      </div>
+    </div>
+  </div>
+</div>
+<br><br>
+
+{% endblock %}

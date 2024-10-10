@@ -1,0 +1,50 @@
+{% extends '../layouts/base.html' %}
+
+{% block main %}
+
+<h1 style="text-align: center;">Quản lý nhân viên</h1>
+{% include 'partials/filter_emp.html' %}
+<br>
+<table class="table table-hover table-bordered">
+  <thead class="table-info">
+    <tr>
+      <th scope="col">Tài khoản</th>
+      <th scope="col">Họ tên</th>
+      <th scope="col">Phòng</th>
+      <th scope="col">Vị trí</th>
+      <th scope="col">Ngày vào</th>
+      <th scope="col">Ngày nghỉ</th>
+      <th scope="col">Tình trạng</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for emp in page_obj %}
+    <tr>
+      <td>{{ emp.username }}</td>
+      <td><a href="/profile/{{emp.username}}/" style="text-decoration: none;">{{ emp.first_name }} {{ emp.last_name }}</a></td>
+      <td>{{ emp.profile.department }}</td>
+      <td>{{ emp.profile.position }}</td>
+      <td>{{ emp.profile.start_date }}</td>
+      <td>{{ emp.profile.end_date }}</td>
+      <td>
+        {% if emp.profile.end_date %}
+        Đã nghỉ
+        {% else %}
+        <button btn-leave class="btn btn-danger" value="{{ emp.id }}">Đuổi việc</button>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<form form-leave method="POST">
+  {% csrf_token %}
+  <input hidden name="leave" value="">
+</form>
+
+{% include 'partials/paginator.html' %}
+
+{% load static %}
+<script src="{% static 'employee.js' %}"></script>
+{% endblock %}

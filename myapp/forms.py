@@ -28,13 +28,16 @@ class SignInForm(forms.ModelForm):
 	class Meta:
 		model=User
 		fields = ['username', 'password']
+		widgets = {'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Tên Đăng Nhập'}),
+						'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Mật Khẩu'})}
+		labels = {'username': '', 'password': ''}
 
 
 class SignUpForm(UserCreationForm):
 	email = forms.EmailField(label="Email", widget=forms.TextInput(attrs={'class':'form-control'}))
 	first_name = forms.CharField(label="Họ", max_length=100, widget=forms.TextInput(attrs={'class':'form-control'}))
 	last_name = forms.CharField(label="Tên", max_length=100, widget=forms.TextInput(attrs={'class':'form-control'}))
-
+	gender = forms.ChoiceField(label='Giới tính', choices=[('Nam', 'Nam'), ('Nữ', 'Nữ')], widget=forms.Select(attrs={'class': 'form-select'}))
 	dob = forms.DateField(label="Ngày sinh", widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
 	phone_number = forms.CharField(label="Số điện thoại",max_length=15, widget=forms.TextInput(attrs={'class': 'form-control'}))
 	address = forms.CharField(label="Địa chỉ", max_length=255, widget=forms.TextInput(attrs={'class': 'form-control'}))

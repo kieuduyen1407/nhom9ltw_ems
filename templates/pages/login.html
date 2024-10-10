@@ -1,4 +1,5 @@
 {% extends '../layouts/base.html' %}
+
 {% block main %}
 <h1 style="text-align:center" class="mb-3">Đăng nhập</h1>
 <div class="container" style="display:flex; justify-content:center">
@@ -11,18 +12,7 @@
     </form>
 </div>
 
-<script>
-    document.querySelector('.helptext').remove()
-    document.querySelector('label[for="id_username"]').remove()
-    document.querySelector('label[for="id_password"]').remove()
-    const inputs = document.querySelectorAll('input')
-    if (inputs) {
-        inputs.forEach((input) => {
-            input.classList.add('form-control')
-        })
-    }
-    document.querySelector('#id_username').setAttribute('placeholder','Tên Đăng Nhập')
-    document.querySelector('#id_password').setAttribute('placeholder', 'Mật Khẩu')
-    document.querySelector('#id_password').setAttribute('type', 'password')
-</script>
+{% load static %}
+<script src="{% static 'sign_in_up.js' %}"></script>
+
 {% endblock %}

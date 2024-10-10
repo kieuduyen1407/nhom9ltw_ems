@@ -1,11 +1,60 @@
 {% extends 'layouts/base.html' %}
 
 {% block main %}
-{{user.first_name}} <br>
-{{user.last_name}} <br>
-{{user.email}} <br>
-{{user.profile.position}} <br>
-{{user.profile.address}} <br>
-{{user.profile.dob}} <br>
-<a class="btn btn-info" href="/update_info/{{user.username}}/">Chỉnh sửa</a>
+<br>
+<div class="card" style="width: auto;">
+  <div class="card-header bg-info" style="text-align: center; font-size: 20px;">
+    Thông tin nhân viên
+  </div>
+  <ul class="list-group list-group-flush">
+    <center>
+      <li class="list-group-item">Họ: <strong>{{ user.first_name }}</strong></li>
+      <li class="list-group-item">Tên: <strong>{{ user.last_name }}</strong></li>
+      {% if request.user.is_superuser %}
+      <li class="list-group-item d-flex justify-content-center">Chức vụ:
+        <select id="select-position" name="position" class="form-select" style="cursor: pointer; width: 150px;">
+          {% for pos in positions %}
+          <option {% if pos == user.profile.position %} selected {% endif %}>{{ pos.name }}</option>
+          {% endfor %}
+        </select>
+        <form form-change method="POST">
+          {% csrf_token %}
+          <input hidden name="position" value="{{ user.profile.position }}">
+          <input hidden name="department" value="{{ user.profile.department }}">
+        </form>
+      </li>
+      {% else %}
+      <li class="list-group-item">Chức vụ: <strong>{{ user.profile.position }}</strong></li>
+      {% endif %}
+      {% if request.user.is_superuser %}
+      <li class="list-group-item d-flex justify-content-center">Phòng:
+        <select id="select-department" name="department" class="form-select" style="cursor: pointer; width: 150px;">
+          {% for dep in departments %}
+          <option {% if dep == user.profile.department %} selected {% endif %}>{{ dep.name }}</option>
+          {% endfor %}
+        </select>
+      </li>
+      {% else %}
+      <li class="list-group-item">Phòng: <strong>{{ user.profile.department }}</strong></li>
+      {% endif %}
+      <li class="list-group-item">Giới tính: <strong>{{ user.profile.gender }}</strong></li>
+      <li class="list-group-item">Ngày sinh: <strong>{{ user.profile.dob }}</strong></li>
+      <li class="list-group-item">Email: <strong>{{ user.email }}</strong></li>
+      <li class="list-group-item">Số điện thoại: <strong>{{ user.profile.phone_number }}</strong></li>
+      <li class="list-group-item">Địa chỉ: <strong>{{ user.profile.address }}</strong></li>
+    </center>
+  </ul>
+</div>
+<br>
+{% if request.user == user %}
+<center><a class="btn btn-info" href="/update_info/{{user.username}}/">Chỉnh sửa</a></center>
+{% endif %}
+
+{% if request.user.is_superuser %}
+<center><button class="btn btn-info" btn-change>Xác nhận</button></center>
+{% endif %}
+<br><br>
+
+{% load static %}
+<script src="{% static 'profile_detail.js' %}"></script>
 {% endblock %}

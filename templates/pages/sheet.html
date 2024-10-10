@@ -1,0 +1,33 @@
+{% extends '../layouts/base.html' %}
+
+{% block main %}
+<br>
+<h2 style="text-align: center;">Bảng chấm công của {{ request.user.first_name }} {{ request.user.last_name }}</h2>
+<br>
+<table class="table table-hover table-bordered">
+  <thead class="table-info">
+    <tr>
+      <th scope="col">Ngày làm</th>
+      <th scope="col">Vào ca</th>
+      <th scope="col">Hết ca</th>
+      <th scope="col">Tình trạng</th>
+      <th scope="col">Giờ làm</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for sheet in sheets %}
+    <tr>
+      <td>{{ sheet.date }}</td>
+      <td>{{ sheet.checkin }}</td>
+      <td>{{ sheet.checkout }}</td>
+      <td>{{ sheet.status }}</td>
+      <td>{{ sheet.work_hour }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<br>
+<h5 style="text-align: center;">Đi làm trễ: {{ sheets.count_late }} buổi</h5>
+<h5 style="text-align: center;">Tổng giờ làm: {{ sheets.total_hour|floatformat:2 }} giờ</h5>
+<h5 style="text-align: center;">Tổng tiền lương: {{ sheets.total_salary|floatformat:2 }} VNĐ</h5>
+{% endblock %}

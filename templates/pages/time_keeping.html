@@ -12,11 +12,16 @@ Bựa ni đi mần rè
 
 <form method="POST">
     {% csrf_token %}
+    <input hidden name="check" value="">
     {% if request.user.sheet_set.last.date == date and not request.user.sheet_set.last.checkout %}
-    <button class="btn btn-info" type="submit" name="checkout" value="true">Check Out</button>
+    <button btn-check class="btn btn-info" type="button" value="out">Check Out</button>
     {% endif %}
     {% if request.user.sheet_set.last.date != date %}
-    <button class="btn btn-info" type="submit" name="checkin" value="true">Check In</button>
+    <button btn-check class="btn btn-info" type="button" value="in">Check In</button>
     {% endif %}
 </form>
+
+{% load static %}
+<script src="{% static 'time_keeping.js' %}"></script>
+
 {% endblock %}
