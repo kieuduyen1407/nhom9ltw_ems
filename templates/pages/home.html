@@ -1,0 +1,9 @@
+{% extends '../layouts/base.html' %}
+
+{% block main %}
+{% if request.user.is_authenticated %}
+Xin chào {{request.user.username}}
+{% else %}
+Xin chào web
+{% endif %}
+{% endblock %}

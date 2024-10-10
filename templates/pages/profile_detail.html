@@ -1,0 +1,11 @@
+{% extends 'layouts/base.html' %}
+
+{% block main %}
+{{user.first_name}} <br>
+{{user.last_name}} <br>
+{{user.email}} <br>
+{{user.profile.position}} <br>
+{{user.profile.address}} <br>
+{{user.profile.dob}} <br>
+<a class="btn btn-info" href="/update_info/{{user.username}}/">Chỉnh sửa</a>
+{% endblock %}

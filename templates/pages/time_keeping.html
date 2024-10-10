@@ -1,0 +1,22 @@
+{% extends '../layouts/base.html' %}
+
+{% block main %}
+<h4>Chấm công ngày {{ date }}</h4>
+{% if not request.user.sheet_set.last %}
+<h5>Welcome to company</h5>
+{% endif %}
+
+{% if request.user.sheet_set.last.date == date and request.user.sheet_set.last.checkout %}
+Bựa ni đi mần rè
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    {% if request.user.sheet_set.last.date == date and not request.user.sheet_set.last.checkout %}
+    <button class="btn btn-info" type="submit" name="checkout" value="true">Check Out</button>
+    {% endif %}
+    {% if request.user.sheet_set.last.date != date %}
+    <button class="btn btn-info" type="submit" name="checkin" value="true">Check In</button>
+    {% endif %}
+</form>
+{% endblock %}

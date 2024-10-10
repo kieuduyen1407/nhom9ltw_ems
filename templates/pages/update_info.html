@@ -1,0 +1,14 @@
+{% extends '../layouts/base.html' %}
+{% block main %}
+<h1 style="text-align:center" class="mb-3">Chỉnh sửa thông tin {{request.user.username}}</h1>
+<div class="container" style="display:flex; justify-content:center">
+    <form method="POST" style="width:60vw">
+        {% csrf_token %}
+        {{form_user.as_p}}
+        {{ form_pr.as_p }}
+        <center>
+            <button class="btn btn-info">Cập nhật</button>
+        </center>
+    </form>
+</div>
+{% endblock %}

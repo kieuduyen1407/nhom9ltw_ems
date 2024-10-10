@@ -1,0 +1,17 @@
+{% extends '../layouts/base.html' %}
+{% block main %}
+<h1 style="text-align:center" class="mb-3">Đăng ký</h1>
+<div class="container" style="display:flex; justify-content:center">
+    <form method="POST" style="width:60vw">
+        {% csrf_token %}
+        {{form_rg.as_p}}
+        <center>
+            <button class="btn btn-info">Đăng ký</button>
+        </center>
+    </form>
+</div>
+
+<script>
+    document.querySelector('.helptext').remove()
+</script>
+{% endblock %}

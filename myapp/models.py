@@ -1,57 +1,69 @@
+from datetime import datetime, time
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from django.utils import timezone
+from decimal import Decimal
 
 # Create your models here.
 class Position(models.Model):
     name=models.CharField(max_length=50)
-    salary_coef=models.IntegerField()
+    salary_coef=models.DecimalField(max_digits=3, decimal_places=1)
+    description = models.TextField()
 
     def __str__(self):
         return self.name
 
 
 class Profile(models.Model):
-    nickname=models.CharField(max_length=50)
-    dob=models.DateField(null=True, blank=True)
+    dob=models.DateField()
     phone_number=models.CharField(max_length=12)
+    start_date = models.DateField(auto_now_add=True)
+    end_date = models.DateField(null=True, blank=True)
+    address = models.CharField(max_length=200)
     position=models.ForeignKey(Position,on_delete=models.CASCADE, default=1)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
-         return f'{self.nickname} - {self.user.username}'
+         return f'Profile: {self.user.username}'
 
-    def save(self, *args, **kwargs):
-        if not self.nickname:
-            self.nickname = self.user.username
-        super(Profile, self).save(*args, **kwargs)
-
-def create_profile(sender, instance, created, **kwargs):
-    if created:
-        user_profile = Profile(user=instance)
-        user_profile.save()
-
-post_save.connect(create_profile, sender=User)
-
+# def create_profile(sender, instance, created, **kwargs):
+#     if created:
+#         user_profile = Profile(user=instance)
+#         user_profile.save()
+#
+# post_save.connect(create_profile, sender=User)
 
 
 class Sheet(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     date=models.DateField()
     checkin=models.TimeField()
-    checkout=models.TimeField()
-    work_hour=models.DecimalField(max_digits=5, decimal_places=0, blank=True, null=True)
+    checkout=models.TimeField(blank=True, null=True)
+    work_hour=models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     salary=models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True)
     status=models.CharField(max_length=20, choices=[('Đúng Giờ', 'Đúng Giờ'), ('Muộn', 'Muộn')], default='Đúng Giờ')
 
     def __str__(self):
         return f'{self.user.username} - {self.date}'
 
+    def is_late(self):
+        if self.checkin > time(8, 0, 0):
+            self.status = 'Muộn'
+
     def calculate_salary(self):
         profile = Profile.objects.get(user=self.user)
-        rate = profile.position.salary_coef * 60000
+        rate = profile.position.salary_coef * 30000
         if self.work_hour is not None:
-            self.salary = rate * self.work_hour
+            self.salary = rate * Decimal(self.work_hour)
         else:
             self.salary = 0
 
+    def save(self, *args, **kwargs):
+        if self.checkin and self.checkout:
+            checkin = timezone.datetime.combine(self.date, self.checkin)
+            checkout = timezone.datetime.combine(self.date, self.checkout)
+            self.work_hour = (checkout - checkin).seconds/3600
+
+        self.is_late()
+        self.calculate_salary()
+        super().save( *args, **kwargs)
